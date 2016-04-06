@@ -9,7 +9,8 @@ import os
 os.system("preset.py")
 # read configs
 config = configparser.ConfigParser()
-config.read('config.ini')
+with open('config.ini', 'r', encoding='utf-8') as f:
+    config.read_file(f)
 while config.has_section('TwitterOauth') == False :
     os.system("OAuth.py")
     config.read('config.ini')
@@ -32,18 +33,19 @@ else:
     with open("config.ini", "w") as configfile:
         config.write(configfile)
 
-
 with open('NickNamer.Emojis.txt', 'r', encoding='utf8') as emojis:
     additionals = emojis.readlines()
 
 # script body
-
+namebase += ' '
 while(len(additionals)) :
     additional = additionals[random.randrange(0, len(additionals))]
     try :
         newname = namebase + additional
         twitter.update_profile(name=newname)
-        print ('changed username to : ' + newname)
+        print ('changed username to : ' + str(newname))
+    except UnicodeEncodeError:
+        print ('cannot print \'newname\'. please run on another shell')
     except :
-        print ('error occured : ' + additional)
+        print ('error occured : ' + str(additional))
     time.sleep(delay)

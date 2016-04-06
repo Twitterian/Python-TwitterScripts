@@ -8,7 +8,8 @@ import os
 os.system("preset.py")
 # read configs
 config = configparser.ConfigParser()
-config.read('config.ini')
+with open('config.ini', 'r', encoding='utf-8') as f:
+    config.read_file(f)
 while config.has_section('TwitterOauth') == False :
     os.system("OAuth.py")
     config.read('config.ini')
