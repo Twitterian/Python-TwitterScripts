@@ -45,3 +45,6 @@ Temporary Items
 __pycache__/
 Uncommit/
 config.ini
+dist/
+venv/
+Twitterian.egg-info/
