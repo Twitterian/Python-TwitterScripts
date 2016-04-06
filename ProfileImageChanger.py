@@ -12,17 +12,26 @@ import configparser
 # read configs
 config = configparser.ConfigParser()
 config.read('config.ini')
-
+while config.has_section('TwitterOauth') == False :
+    os.system("OAuth.py")
+    config.read('config.ini')
 twitter = Twython(
     config['TwitterOauth']['AppToken'],
     config['TwitterOauth']['AppSecret'],
     config['TwitterOauth']['UserToken'],
     config['TwitterOauth']['UserSecret']
 )
-delay = int(config['Nick Namer']['Delay'])
+if config.has_section('ProfileImageChanger'):
+    delay = int(config['ProfileImageChanger']['Delay'])
+else:
+    delay = int(input('set delay second : '))
+    config.add_section('ProfileImageChanger')
+    config.set('ProfileImageChanger', 'Delay', str(delay))
+    with open("config.ini", "w") as configfile:
+        config.write(configfile)
 
 # script body
-mypath = "Profile Image Change.Images"
+mypath = "ProfileImageChanger.Images"
 files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
 while(len(files)) :

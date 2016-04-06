@@ -8,17 +8,30 @@ import configparser
 # read configs
 config = configparser.ConfigParser()
 config.read('config.ini')
-
+while config.has_section('TwitterOauth') == False :
+    os.system("OAuth.py")
+    config.read('config.ini')
 twitter = Twython(
     config['TwitterOauth']['AppToken'],
     config['TwitterOauth']['AppSecret'],
     config['TwitterOauth']['UserToken'],
     config['TwitterOauth']['UserSecret']
 )
-namebase = config['Nick Namer']['NameFormat']
-delay = int(config['Nick Namer']['Delay'])
 
-with open('Nick Namer.Emojis.txt', 'r', encoding='utf8') as emojis:
+if config.has_section('NickNamer'):
+    namebase = config['NickNamer']['NameFormat']
+    delay = int(config['NickNamer']['Delay'])
+else:
+    namebase = input("set your name base : ")
+    delay = int(input("set delay secont : "))
+    config.add_section('NickNamer');
+    config.set('NickNamer', 'NameFormat', namebase)
+    config.set('NickNamer', 'Delay', str(delay))
+    with open("config.ini", "w") as configfile:
+        config.write(configfile)
+
+
+with open('NickNamer.Emojis.txt', 'r', encoding='utf8') as emojis:
     additionals = emojis.readlines()
 
 # script body

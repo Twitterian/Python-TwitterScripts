@@ -2,13 +2,16 @@
 
 from twython import Twython
 from datetime import date, datetime, timedelta
-from Twitterian import Friendships;
-import configparser;
+from Twitterian import Friendships
+import configparser
+import os
 
 # read configs
 config = configparser.ConfigParser()
 config.read('config.ini')
-
+while config.has_section('TwitterOauth') == False :
+    os.system("OAuth.py")
+    config.read('config.ini')
 twitter = Twython(
     config['TwitterOauth']['AppToken'],
     config['TwitterOauth']['AppSecret'],

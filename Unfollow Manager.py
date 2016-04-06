@@ -7,7 +7,9 @@ from Twitterian import Friendships;
 # read configs
 config = configparser.ConfigParser()
 config.read('config.ini')
-
+while config.has_section('TwitterOauth') == False :
+    os.system("OAuth.py")
+    config.read('config.ini')
 twitter = Twython(
     config['TwitterOauth']['AppToken'],
     config['TwitterOauth']['AppSecret'],
@@ -15,8 +17,7 @@ twitter = Twython(
     config['TwitterOauth']['UserSecret']
 )
 
-username = twitter.verify_credentials()['screen_name']
-
+# script body
 friends = Friendships.GetFriendships(twitter);
 followers = Friendships.GetFollowers(twitter);
 
