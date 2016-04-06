@@ -3,7 +3,9 @@
 from twython import Twython
 from datetime import date, datetime, timedelta
 from Twitterian import Friendships;
+import os
 
+os.system("preset.py")
 # read configs
 config = configparser.ConfigParser()
 config.read('config.ini')

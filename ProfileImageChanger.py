@@ -9,6 +9,7 @@ import random
 from os.path import isfile, join
 import configparser
 
+os.system("preset.py")
 # read configs
 config = configparser.ConfigParser()
 config.read('config.ini')

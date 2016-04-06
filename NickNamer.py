@@ -4,7 +4,9 @@ from twython import Twython
 import time
 import random
 import configparser
+import os
 
+os.system("preset.py")
 # read configs
 config = configparser.ConfigParser()
 config.read('config.ini')
