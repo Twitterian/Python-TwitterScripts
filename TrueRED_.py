@@ -29,15 +29,18 @@ if config.has_section('TrueRED_') == False :
 else:
     ownerid = config['TrueRED_']['OwnerID']
 
-with open('TrueRED_.input.public.txt', 'r', encoding='utf8') as fip:
+with open('TrueRED_.input.public.txt', 'r', encoding='utf-8') as fip:
     input_public = fip.readlines()
-with open('TrueRED_.input.mention.txt', 'r', encoding='utf8') as fim:
+with open('TrueRED_.input.mention.txt', 'r', encoding='utf-8') as fim:
     input_mention = fim.readlines()
-with open('TrueRED_.output.public.txt', 'r', encoding='utf8') as fop:
+with open('TrueRED_.output.public.txt', 'r', encoding='utf-8') as fop:
     output_public = fop.readlines()
-with open('TrueRED_.input.mention.txt', 'r', encoding='utf8') as fom:
+with open('TrueRED_.output.mention.txt', 'r', encoding='utf-8') as fom:
     output_mention = fom.readlines()
-
+input_public.pop(0)
+input_mention.pop(0)
+output_public.pop(0)
+output_mention.pop(0)
 # script body
 twitter = Twython( consumer_key, consumer_secret, access_token, access_token_secret )
 currentuser = twitter.verify_credentials()
@@ -51,18 +54,18 @@ class MyStreamer(TwythonStreamer):
                 text = data['text']
                 print(text)
                 if not 'retweeted_status' in data and data['user']['id'] != currentuser['id']:
-                        if not 'in_reply_to_status_id' in data: # public tweet
-                            for value in input_public:
-                                if value in text:
-                                    output = output_public[random.randrange(0, len(output_public))]
-                                    twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output, in_reply_to_status_id=data['id'])
-                        elif '@' + currentuser['screen_name'].lower() in text.lower(): # mention to me
-                            for value in input_mention:
-                                if value in text:
-                                    output = output_mention[random.randrange(0, len(output_mention))]
-                                    twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output, in_reply_to_status_id=data['id'])
+                    if data['in_reply_to_status_id'] == None: # public tweet
+                        for value in input_public:
+                            if value.strip().replace(' ', '') in text.replace(' ', ''):
+                                output = output_public[random.randrange(0, len(output_public))]
+                                twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output, in_reply_to_status_id=data['id'])
+                    elif '@' + currentuser['screen_name'].lower() in text.lower(): # mention to me
+                        for value in input_mention:
+                            if value.strip().replace(' ', '') in text.replace(' ', ''):
+                                output = output_mention[random.randrange(0, len(output_mention))]
+                                twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output, in_reply_to_status_id=data['id'])
         except Exception as e:
-            print ('error : ' + str(status_code))
+            print ('error : ' + str(e))
             twitter.update_status(status='@' + ownerid + ' ' + str(e))
 
     def on_error(self, status_code, data):
