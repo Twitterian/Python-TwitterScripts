@@ -56,7 +56,7 @@ class MyStreamer(TwythonStreamer):
                                 if value in text:
                                     output = output_public[random.randrange(0, len(output_public))]
                                     twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output, in_reply_to_status_id=data['id'])
-                        elif '@' + currentuser['screen_name'].lower() in text.lower() # mention to me
+                        elif '@' + currentuser['screen_name'].lower() in text.lower(): # mention to me
                             for value in input_mention:
                                 if value in text:
                                     output = output_mention[random.randrange(0, len(output_mention))]
