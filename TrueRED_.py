@@ -5,9 +5,7 @@ from datetime import date, datetime, timedelta
 import os
 from twython import TwythonStreamer
 import configparser
-
-input1 = '잘자'
-output1 = '네가 맞이하게 될 내일이, 오늘보다 훨씬 즐거운 일들로 가득하길 기도할게';
+import random
 
 config = configparser.ConfigParser()
 try:
@@ -53,9 +51,16 @@ class MyStreamer(TwythonStreamer):
                 text = data['text']
                 print(text)
                 if not 'retweeted_status' in data and data['user']['id'] != currentuser['id']:
-                    if input1 in text:
-                        if '@' + currentuser['screen_name'].lower() in text.lower() or not 'in_reply_to_status_id' in data:
-                            twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output1, in_reply_to_status_id=data['id'])
+                        if not 'in_reply_to_status_id' in data: # public tweet
+                            for value in input_public:
+                                if value in text:
+                                    output = output_public[random.randrange(0, len(output_public))]
+                                    twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output, in_reply_to_status_id=data['id'])
+                        elif '@' + currentuser['screen_name'].lower() in text.lower() # mention to me
+                            for value in input_mention:
+                                if value in text:
+                                    output = output_mention[random.randrange(0, len(output_mention))]
+                                    twitter.update_status(status='@' + data['user']['screen_name'] + ' ' + output, in_reply_to_status_id=data['id'])
         except Exception as e:
             print ('error : ' + str(status_code))
             twitter.update_status(status='@' + ownerid + ' ' + str(e))
