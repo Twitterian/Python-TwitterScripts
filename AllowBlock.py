@@ -61,16 +61,16 @@ for user in followers:
                     print("pass user @%s(%d)" % (suser["screen_name"], user))
                     break
                 elif sel == 1:
-                    twitter.create_block(screen_name=user['screen_name'])
-                    twitter.destroy_block(screen_name=user['screen_name'])
+                    twitter.create_block(screen_name=suser['screen_name'])
+                    twitter.destroy_block(screen_name=suser['screen_name'])
                     print("block and unblock @%s(%d)" % (suser["screen_name"], user))
                     break
                 elif sel == 2:
-                    twitter.create_block(screen_name=user['screen_name'])
+                    twitter.create_block(screen_name=suser['screen_name'])
                     print("block user @%s(%d)" % (suser["screen_name"], user))
                     break
                 elif sel == 3:
-                    twitter.create_friendship(screen_name=user['screen_name'])
+                    twitter.create_friendship(screen_name=suser['screen_name'])
                     print("follow user @%s(%d)" % (suser["screen_name"], user))
                     message = input("\ndo yo wanna mention to this user? if you dont wanna, you can input empty space : ")
                     if message != '':
